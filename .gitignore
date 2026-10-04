@@ -1,12 +1,12 @@
 # Backend - Python
-backend/venv/
-backend/.venv/
-backend/__pycache__/
-backend/**/__pycache__/
+back/venv/
+back/.venv/
+back/__pycache__/
+back/**/__pycache__/
 
 # Backend environment
-backend/.env
-backend/.env.*
+back/.env
+back/.env.*
 
 # Frontend - Node
 frontend/node_modules/
