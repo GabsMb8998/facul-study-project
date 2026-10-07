@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'users',
     'content',
     'exercises',
+    'learning',
 ]
 
 AUTH_USER_MODEL = "users.User"
