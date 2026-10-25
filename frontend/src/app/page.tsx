@@ -1,70 +1,127 @@
-import Image from "next/image";
+// src/app/page.tsx
+'use client';
 
-export default function Home() {
+import React, { useEffect, useState } from 'react';
+import { Flame, Target, Trophy, PlayCircle, BookOpen, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { getMaterias } from '@/services/api';
+import type { Materia } from '@/services/api';
+
+export default function DashboardPage() {
+  const [materias, setMaterias] = useState<Materia[]>([]);
+  const [materiasError, setMateriasError] = useState<string | null>(null);
+  const [isLoadingMaterias, setIsLoadingMaterias] = useState(true);
+
+  useEffect(() => {
+    getMaterias()
+      .then(setMaterias)
+      .catch((cause: unknown) => {
+        setMateriasError(
+          cause instanceof Error ? cause.message : 'Não foi possível carregar as matérias.',
+        );
+      })
+      .finally(() => setIsLoadingMaterias(false));
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-md mx-auto min-h-screen bg-gray-50 pb-24">
+      {/* Banner Superior */}
+      <div className="bg-purple-600 text-white p-6 rounded-b-3xl shadow-lg">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <span className="text-xs font-semibold text-purple-200">BEM-VINDO DE VOLTA</span>
+            <h1 className="text-2xl font-bold">Olá, Estudante! 👋</h1>
+          </div>
+          <div className="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center font-bold">
+            E
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Resumo de Eficiência */}
+        <div className="grid grid-cols-3 gap-3 bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 mt-4 text-center">
+          <div>
+            <div className="flex items-center justify-center gap-1 text-amber-300 font-bold text-lg">
+              <Flame className="w-5 h-5 fill-amber-300" /> 5
+            </div>
+            <p className="text-[10px] text-purple-200 uppercase font-medium">Dias de Sequência</p>
+          </div>
+          <div className="border-x border-white/10">
+            <div className="flex items-center justify-center gap-1 text-emerald-300 font-bold text-lg">
+              <Target className="w-5 h-5" /> 84%
+            </div>
+            <p className="text-[10px] text-purple-200 uppercase font-medium">Precisão Geral</p>
+          </div>
+          <div>
+            <div className="flex items-center justify-center gap-1 text-sky-300 font-bold text-lg">
+              <Trophy className="w-5 h-5" /> 140
+            </div>
+            <p className="text-[10px] text-purple-200 uppercase font-medium">Questões Feitas</p>
+          </div>
         </div>
-      </main>
+      </div>
+
+      <div className="p-5 space-y-6">
+        {/* Card: Continuar de Onde Parou */}
+        <div>
+          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">
+            Continuar Estudos
+          </h2>
+          <Link
+            href="/quiz/1"
+            className="flex items-center justify-between bg-white p-4 rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <PlayCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs text-purple-600 font-semibold">Matemática</span>
+                <h3 className="font-bold text-gray-800 text-sm">Regra de Três Simples</h3>
+                <p className="text-xs text-gray-400">Módulo 1 • 7/10 resolvido</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all" />
+          </Link>
+        </div>
+
+        {/* Lista de Matérias */}
+        <div>
+          <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-3">
+            Suas Matérias
+          </h2>
+          <div className="space-y-3">
+            {materiasError && (
+              <p role="alert" className="text-sm text-red-600">
+                {materiasError}
+              </p>
+            )}
+            {materias.map((materia) => (
+              <Link
+                key={materia.id}
+                href={`/materias/${materia.id}`}
+                className="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 shadow-sm hover:border-purple-200 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-800 text-sm">{materia.nome}</h4>
+                    <p className="text-xs text-gray-400">{materia.descricao}</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400" />
+              </Link>
+            ))}
+            {isLoadingMaterias && (
+              <p className="text-sm text-gray-500">Carregando matérias...</p>
+            )}
+            {!isLoadingMaterias && !materiasError && materias.length === 0 && (
+              <p className="text-sm text-gray-500">Nenhuma matéria publicada ainda.</p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

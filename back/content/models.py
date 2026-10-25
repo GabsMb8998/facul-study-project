@@ -37,3 +37,29 @@ class Assunto(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class SubAssunto(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    assunto = models.ForeignKey(
+        Assunto,
+        on_delete=models.CASCADE,
+        related_name="subassuntos",
+    )
+    nome = models.CharField(max_length=100)
+    conteudo = models.TextField(blank=True)
+    ordem = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+    )
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ("ordem", "nome")
+
+    def __str__(self):
+        return f"{self.assunto.nome} - {self.nome}"
